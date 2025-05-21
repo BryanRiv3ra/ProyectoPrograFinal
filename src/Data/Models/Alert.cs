@@ -5,28 +5,32 @@ namespace Proyecto_Final.Data.Models
     public enum AlertType
     {
         LowStock,
-        OutOfStock,
-        ExcessStock,
+        StockOut,
         PriceChange,
-        ExpirationDate
+        QualityIssue,
+        ExpirationDate,
+        SystemError,
+        Other
     }
     
-    public enum AlertStatus
+    public enum AlertSeverity
     {
-        New,
-        Acknowledged,
-        Resolved,
-        Ignored
+        Info,
+        Warning,
+        Critical
     }
     
     public class Alert
     {
         public int Id { get; set; }
-        public int ProductId { get; set; }
         public AlertType Type { get; set; }
+        public AlertSeverity Severity { get; set; }
         public string Message { get; set; }
-        public AlertStatus Status { get; set; }
+        public int? ProductId { get; set; }
         public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public bool IsResolved { get; set; }
+        public bool IsExpired { get; set; }
         public DateTime? ResolvedAt { get; set; }
         
         // Propiedad de navegación
@@ -35,7 +39,9 @@ namespace Proyecto_Final.Data.Models
         public Alert()
         {
             CreatedAt = DateTime.Now;
-            Status = AlertStatus.New;
+            UpdatedAt = DateTime.Now;
+            IsResolved = false;
+            IsExpired = false;
         }
     }
 }
