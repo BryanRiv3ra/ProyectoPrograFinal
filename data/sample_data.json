@@ -1,0 +1,39 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Producto A",
+      "quantity": 100,
+      "price": 10.50,
+      "category": "Categoría 1"
+    },
+    {
+      "id": 2,
+      "name": "Producto B",
+      "quantity": 50,
+      "price": 20.00,
+      "category": "Categoría 2"
+    },
+    {
+      "id": 3,
+      "name": "Producto C",
+      "quantity": 200,
+      "price": 5.75,
+      "category": "Categoría 1"
+    },
+    {
+      "id": 4,
+      "name": "Producto D",
+      "quantity": 0,
+      "price": 15.00,
+      "category": "Categoría 3"
+    },
+    {
+      "id": 5,
+      "name": "Producto E",
+      "quantity": 30,
+      "price": 8.99,
+      "category": "Categoría 2"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+[2025-05-27 22:20:42] Producto A actualizado en el inventario.
+[2025-05-27 22:25:30] Producto A actualizado en el inventario.
+[2025-05-27 22:25:30] Predicción: Producto A necesita reabastecer 20 unidades.
+[2025-05-27 22:35:20] Producto A actualizado en el inventario.
+[2025-05-27 22:35:20] Predicción: Producto A necesita reabastecer 20 unidades.
+[2025-05-27 22:35:20] Predicción: Producto A necesita reabastecer 20 unidades.
