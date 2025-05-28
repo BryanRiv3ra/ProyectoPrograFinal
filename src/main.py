@@ -42,6 +42,10 @@ def main():
             try:
                 inventory_agent.add_product(product_name, quantity, restock_threshold)
                 print(Fore.GREEN + "Producto agregado con éxito." + Style.RESET_ALL)
+                # Generar el reporte JSON y PDF actualizados automáticamente
+                report_generator.generate_report()
+                report_generator.generate_pdf_report()
+                print(Fore.GREEN + "Reportes actualizados (JSON y PDF)." + Style.RESET_ALL)
             except Exception as e:
                 print(Fore.RED + f"Error: No se pudo agregar el producto. {e}" + Style.RESET_ALL)
         elif choice == "2":
@@ -79,34 +83,6 @@ def get_positive_int(prompt):
             return value
         except ValueError as e:
             print(f"Entrada inválida: {e}")
-
-def _connect(self):
-    """Establece la conexión con la base de datos."""
-    try:
-        connection = sqlite3.connect(self.db_path)
-        # Verificar que el archivo sea una base de datos válida
-        connection.execute("PRAGMA integrity_check;")
-        return connection
-    except sqlite3.DatabaseError as e:
-        print(f"Error: El archivo no es una base de datos válida. {e}")
-        raise
-
-def add_product(self, product_name, quantity, restock_threshold=10):
-    if not product_name or not isinstance(product_name, str):
-        raise ValueError("El nombre del producto debe ser una cadena no vacía.")
-    if quantity < 0 or restock_threshold < 0:
-        raise ValueError("La cantidad y el umbral de reposición deben ser mayores o iguales a 0.")
-    # Código existente...
-
-def delete_product(self, product_name):
-    query = "DELETE FROM inventory WHERE product_name = ?"
-    self.db_manager.execute_query(query, (product_name,))
-    print(f"Producto '{product_name}' eliminado del inventario.")
-
-def search_product(self, product_name):
-    query = "SELECT * FROM inventory WHERE product_name LIKE ?"
-    results = self.db_manager.fetch_query(query, (f"%{product_name}%",))
-    return results
 
 if __name__ == "__main__":
     try:

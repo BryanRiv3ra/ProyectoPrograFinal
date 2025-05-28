@@ -4,6 +4,10 @@ class InventoryAgent:
 
     def add_product(self, product_name, quantity, restock_threshold=10):
         """Agrega un nuevo producto al inventario."""
+        if not product_name or not isinstance(product_name, str):
+            raise ValueError("El nombre del producto debe ser una cadena no vacía.")
+        if quantity < 0 or restock_threshold < 0:
+            raise ValueError("La cantidad y el umbral de reposición deben ser mayores o iguales a 0.")
         query = """
         INSERT INTO inventory (product_name, quantity, restock_threshold)
         VALUES (?, ?, ?)
@@ -41,3 +45,9 @@ class InventoryAgent:
         query = "DELETE FROM inventory WHERE product_name = ?"
         self.db_manager.execute_query(query, (product_name,))
         print(f"Producto '{product_name}' eliminado del inventario.")
+
+    def search_product(self, product_name):
+        """Busca un producto en el inventario por su nombre."""
+        query = "SELECT * FROM inventory WHERE product_name LIKE ?"
+        results = self.db_manager.fetch_query(query, (f"%{product_name}%",))
+        return results
