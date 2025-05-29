@@ -31,7 +31,8 @@ def main():
         print("3. Verificar inventario")
         print("4. Generar reporte")
         print("5. Predicción de reabastecimiento")
-        print("6. Salir")
+        print("6. Eliminar producto")
+        print("7. Salir")
 
         choice = input("Selecciona una opción: ")
 
@@ -42,17 +43,28 @@ def main():
             try:
                 inventory_agent.add_product(product_name, quantity, restock_threshold)
                 print(Fore.GREEN + "Producto agregado con éxito." + Style.RESET_ALL)
-                # Generar el reporte JSON y PDF actualizados automáticamente
                 report_generator.generate_report()
                 report_generator.generate_pdf_report()
                 print(Fore.GREEN + "Reportes actualizados (JSON y PDF)." + Style.RESET_ALL)
+                # ALERTA INTELIGENTE: Revisar productos bajo umbral
+                products = db_manager.fetch_query("SELECT product_name, quantity, restock_threshold FROM inventory")
+                for product in products:
+                    if product[1] < product[2]:
+                        print(Fore.YELLOW + f"¡Alerta! El producto '{product[0]}' está por debajo del umbral de reposición." + Style.RESET_ALL)
             except Exception as e:
                 print(Fore.RED + f"Error: No se pudo agregar el producto. {e}" + Style.RESET_ALL)
+
         elif choice == "2":
             product_name = input("Nombre del producto: ")
             new_quantity = get_positive_int("Nueva cantidad: ")
             inventory_agent.update_product(product_name, new_quantity)
             print(f"Producto '{product_name}' actualizado con éxito.")
+            # ALERTA INTELIGENTE: Revisar productos bajo umbral
+            products = db_manager.fetch_query("SELECT product_name, quantity, restock_threshold FROM inventory")
+            for product in products:
+                if product[1] < product[2]:
+                    print(Fore.YELLOW + f"¡Alerta! El producto '{product[0]}' está por debajo del umbral de reposición." + Style.RESET_ALL)
+
         elif choice == "3":
             products = db_manager.fetch_query("SELECT * FROM inventory")
             headers = ["ID", "Nombre", "Cantidad", "Umbral"]
@@ -68,12 +80,22 @@ def main():
             for prediction in predictions:
                 print(f"Producto: {prediction['product_name']}, Reabastecer: {prediction['restock_amount']} unidades.")
                 event_logger.log_event(f"Predicción: {prediction['product_name']} necesita reabastecer {prediction['restock_amount']} unidades.")
+       
         elif choice == "6":
+            product_name = input("Nombre del producto a eliminar: ")
+            try:
+                inventory_agent.delete_product(product_name)
+                print(Fore.GREEN + f"Producto '{product_name}' eliminado con éxito." + Style.RESET_ALL)
+                report_generator.generate_report()
+                report_generator.generate_pdf_report()
+                print(Fore.GREEN + "Reportes actualizados (JSON y PDF)." + Style.RESET_ALL)
+            except Exception as e:
+                print(Fore.RED + f"Error: No se pudo eliminar el producto. {e}" + Style.RESET_ALL)
+        elif choice == "7":
             print("Saliendo del sistema...")
             break
         else:
             print("Opción no válida. Intenta de nuevo.")
-
 def get_positive_int(prompt):
     while True:
         try:

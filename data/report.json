@@ -1,26 +1,31 @@
-[
-    {
-        "id": 1,
-        "product_name": "Producto A",
-        "quantity": 8,
-        "restock_threshold": 10
-    },
-    {
-        "id": 2,
-        "product_name": "Producto B",
-        "quantity": 20,
-        "restock_threshold": 15
-    },
-    {
-        "id": 3,
-        "product_name": "Producto A",
-        "quantity": 8,
-        "restock_threshold": 10
-    },
-    {
-        "id": 4,
-        "product_name": "Producto B",
-        "quantity": 20,
-        "restock_threshold": 15
-    }
-]
+{
+    "inventario": [
+        {
+            "nombre": "Manga",
+            "cantidad": 50,
+            "umbral": 10,
+            "clase": "B"
+        },
+        {
+            "nombre": "Producto B",
+            "cantidad": 20,
+            "umbral": 15,
+            "clase": "B"
+        },
+        {
+            "nombre": "Producto B",
+            "cantidad": 20,
+            "umbral": 15,
+            "clase": "C"
+        },
+        {
+            "nombre": "Computadora dell g15",
+            "cantidad": 1,
+            "umbral": 10,
+            "clase": "C"
+        }
+    ],
+    "alertas": [
+        "¡Alerta! El producto 'Computadora dell g15' está por debajo del umbral de reposición."
+    ]
+}

@@ -5,59 +5,95 @@ class ReportGenerator:
     def __init__(self, db_manager):
         self.db_manager = db_manager
 
-    def generate_report(self, file_path='data/report.json'):
-        """Genera un reporte del inventario en formato JSON."""
-        query = "SELECT id, product_name, quantity, restock_threshold FROM inventory"
-        inventory_data = self.db_manager.fetch_query(query)
-
-        report = [
-            {
-                "id": item[0],
-                "product_name": item[1],
-                "quantity": item[2],
-                "restock_threshold": item[3],
+    def generate_report(self):
+        products = self.db_manager.fetch_query("SELECT product_name, quantity, restock_threshold FROM inventory")
+        # Clasificación ABC
+        products_sorted = sorted(products, key=lambda x: x[1], reverse=True)
+        total = len(products_sorted)
+        a_cut = int(total * 0.2)
+        b_cut = int(total * 0.5)
+        inventario = []
+        alertas = []
+        for idx, product in enumerate(products_sorted):
+            if idx < a_cut:
+                clase = "A"
+            elif idx < b_cut:
+                clase = "B"
+            else:
+                clase = "C"
+            prod_dict = {
+                "nombre": product[0],
+                "cantidad": product[1],
+                "umbral": product[2],
+                "clase": clase
             }
-            for item in inventory_data
-        ]
-
-        with open(file_path, 'w') as json_file:
-            json.dump(report, json_file, indent=4)
-        print(f"Reporte generado en: {file_path}")
+            inventario.append(prod_dict)
+            if product[1] < product[2]:
+                alerta = f"¡Alerta! El producto '{product[0]}' está por debajo del umbral de reposición."
+                alertas.append(alerta)
+        reporte = {
+            "inventario": inventario,
+            "alertas": alertas
+        }
+        with open("data/report.json", "w", encoding="utf-8") as f:
+            json.dump(reporte, f, indent=4, ensure_ascii=False)
 
     def generate_json_report(self, file_path):
         inventory_data = self.db_manager.fetch_inventory_data()
         with open(file_path, 'w') as json_file:
             json.dump(inventory_data, json_file, indent=4)
 
-    def generate_pdf_report(self, file_path='data/report.pdf'):
-        """Genera un reporte del inventario en formato PDF."""
-        query = "SELECT product_name, quantity, restock_threshold FROM inventory"
-        inventory_data = self.db_manager.fetch_query(query)
+    def generate_pdf_report(self):
+        products = self.db_manager.fetch_query("SELECT product_name, quantity, restock_threshold FROM inventory")
+        products_sorted = sorted(products, key=lambda x: x[1], reverse=True)
+        total = len(products_sorted)
+        a_cut = int(total * 0.2)
+        b_cut = int(total * 0.5)
 
         pdf = FPDF()
         pdf.add_page()
-        pdf.set_font("Arial", size=12)
+        pdf.set_font("Arial", "B", 16)
+        pdf.cell(0, 10, "Reporte de Inventario", ln=True, align="C")
+        pdf.ln(10)
 
-        # Título del reporte
-        pdf.set_font("Arial", style="B", size=16)
-        pdf.cell(200, 10, txt="Reporte de Inventario", ln=True, align="C")
-        pdf.ln(10)  # Espaciado
+        # Sección de alertas
+        pdf.set_font("Arial", "B", 12)
+        pdf.cell(0, 10, "Alertas:", ln=True)
+        hay_alertas = False
+        for product in products_sorted:
+            if product[1] < product[2]:
+                alerta = f"¡Alerta! El producto '{product[0]}' está por debajo del umbral de reposición."
+                pdf.set_text_color(255, 0, 0)
+                pdf.cell(0, 10, alerta, ln=True)
+                hay_alertas = True
+        if not hay_alertas:
+            pdf.set_text_color(0, 128, 0)
+            pdf.cell(0, 10, "No hay alertas.", ln=True)
+        pdf.set_text_color(0, 0, 0)
+        pdf.ln(5)
 
-        # Encabezados de la tabla
-        pdf.set_font("Arial", style="B", size=12)
-        pdf.cell(80, 10, txt="Producto", border=1)
-        pdf.cell(40, 10, txt="Cantidad", border=1)
-        pdf.cell(70, 10, txt="Umbral de Reposición", border=1)
+        # Sección de inventario con clasificación ABC
+        pdf.set_font("Arial", "B", 12)
+        pdf.cell(0, 10, "Inventario (Clasificación ABC):", ln=True)
+        pdf.set_font("Arial", "B", 10)
+        pdf.cell(50, 10, "Nombre", 1)
+        pdf.cell(30, 10, "Cantidad", 1)
+        pdf.cell(30, 10, "Umbral", 1)
+        pdf.cell(20, 10, "Clase", 1)
         pdf.ln()
-
-        # Datos del inventario
-        pdf.set_font("Arial", size=12)
-        for product_name, quantity, restock_threshold in inventory_data:
-            pdf.cell(80, 10, txt=product_name, border=1)
-            pdf.cell(40, 10, txt=str(quantity), border=1)
-            pdf.cell(70, 10, txt=str(restock_threshold), border=1)
+        pdf.set_font("Arial", "", 10)
+        for idx, product in enumerate(products_sorted):
+            if idx < a_cut:
+                clase = "A"
+            elif idx < b_cut:
+                clase = "B"
+            else:
+                clase = "C"
+            pdf.cell(50, 10, str(product[0]), 1)
+            pdf.cell(30, 10, str(product[1]), 1)
+            pdf.cell(30, 10, str(product[2]), 1)
+            pdf.cell(20, 10, clase, 1)
             pdf.ln()
 
-        # Guardar el archivo PDF
-        pdf.output(file_path)
-        print(f"Reporte PDF generado en: {file_path}")
+        pdf.output("data/report.pdf")
+        print(f"Reporte PDF generado en: {'data/report.pdf'}")

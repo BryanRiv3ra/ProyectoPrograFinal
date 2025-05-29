@@ -4,3 +4,6 @@
 [2025-05-27 22:35:20] Producto A actualizado en el inventario.
 [2025-05-27 22:35:20] Predicción: Producto A necesita reabastecer 20 unidades.
 [2025-05-27 22:35:20] Predicción: Producto A necesita reabastecer 20 unidades.
+[2025-05-28 23:40:48] ¡Alerta! El producto 'Producto A' está por debajo del umbral de reposición.
+[2025-05-28 23:40:48] ¡Alerta! El producto 'Producto A' está por debajo del umbral de reposición.
+[2025-05-28 23:40:48] ¡Alerta! El producto 'Computadora dell g15' está por debajo del umbral de reposición.
