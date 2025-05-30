@@ -1,21 +1,15 @@
 {
     "inventario": [
         {
+            "nombre": "Mushoku tensei LN",
+            "cantidad": 100,
+            "umbral": 5,
+            "clase": "B"
+        },
+        {
             "nombre": "Manga",
             "cantidad": 50,
             "umbral": 10,
-            "clase": "B"
-        },
-        {
-            "nombre": "Producto B",
-            "cantidad": 20,
-            "umbral": 15,
-            "clase": "B"
-        },
-        {
-            "nombre": "Producto B",
-            "cantidad": 20,
-            "umbral": 15,
             "clase": "C"
         },
         {

@@ -7,3 +7,15 @@
 [2025-05-28 23:40:48] ¡Alerta! El producto 'Producto A' está por debajo del umbral de reposición.
 [2025-05-28 23:40:48] ¡Alerta! El producto 'Producto A' está por debajo del umbral de reposición.
 [2025-05-28 23:40:48] ¡Alerta! El producto 'Computadora dell g15' está por debajo del umbral de reposición.
+[ERROR] 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+[ERROR] cannot access local variable 'openai_agent' where it is not associated with a value
+[ERROR] cannot access local variable 'openai_agent' where it is not associated with a value
